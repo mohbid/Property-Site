@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyline Estates</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a class="logo" href="#">
+      <span class="logo-mark">K</span>
+      <span>Keyline Estates</span>
+    </a>
+
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open menu" aria-expanded="false">
+      Menu
+    </button>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#">Home</a>
+      <a href="#properties">Properties</a>
+      <a href="#detail-title">Snapshot</a>
+      <a href="#add-property">List With Us</a>
+      <a href="#contact">Contact</a>
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">Sound off</button>
+    </div>
+  </nav>
+
+  <header class="hero" id="hero">
+    <div class="hero-bg hero-bg-one" aria-hidden="true"></div>
+    <div class="hero-bg hero-bg-two" aria-hidden="true"></div>
+    <div class="hero-bg hero-bg-three" aria-hidden="true"></div>
+    <div class="hero-bg hero-bg-four" aria-hidden="true"></div>
+    <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <p class="eyebrow">Find well. Move wisely.</p>
+      <h1>Homes that feel considered before you even step inside.</h1>
+      <p>Keyline brings together realistic pricing, useful detail and local guidance so buyers can shortlist with confidence.</p>
+      <a class="button" href="#properties">View Properties</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Moving brand strip -->
+    <section class="brand-strip" aria-label="Keyline highlights">
+      <div class="brand-marquee">
+        <div class="brand-marquee-group">
+          <a href="#contact">Private viewings</a>
+          <a href="#detail-title">Mortgage estimates</a>
+          <a href="#valuation">Considered valuations</a>
+          <a href="#properties">Elegant listings</a>
+          <a href="#local-knowledge">Local knowledge</a>
+          <a href="#add-property">Clear next steps</a>
+        </div>
+
+        <div class="brand-marquee-group" aria-hidden="true">
+          <a href="#contact" tabindex="-1">Private viewings</a>
+          <a href="#detail-title" tabindex="-1">Mortgage estimates</a>
+          <a href="#valuation" tabindex="-1">Considered valuations</a>
+          <a href="#properties" tabindex="-1">Elegant listings</a>
+          <a href="#local-knowledge" tabindex="-1">Local knowledge</a>
+          <a href="#add-property" tabindex="-1">Clear next steps</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand promise -->
+    <section class="promise-section" aria-label="Keyline promises">
+      <div class="promise-controls">
+        <p class="eyebrow">Buyer prompts</p>
+        <div>
+          <button class="slider-button" id="promisePrev" type="button" aria-label="Previous prompt">Back</button>
+          <button class="slider-button" id="promiseNext" type="button" aria-label="Next prompt">Next</button>
+        </div>
+      </div>
+
+      <div class="promise-track" id="promiseTrack">
+        <article>
+          <strong>01</strong>
+          <h2>Priced with context</h2>
+          <p>Every guide price is paired with area notes, running-cost clues and realistic next steps.</p>
+        </article>
+
+        <article>
+          <strong>02</strong>
+          <h2>Details that matter</h2>
+          <p>Bedrooms, bathrooms, tenure, EPC and council tax are visible before you book a viewing.</p>
+        </article>
+
+        <article>
+          <strong>03</strong>
+          <h2>Shortlist smarter</h2>
+          <p>Save homes, compare up to three, switch views and preview the numbers without leaving the page.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Search and filter area -->
+    <section class="search-section" aria-labelledby="search-title">
+      <div class="section-heading">
+        <p class="eyebrow">Search the market</p>
+        <h2 id="search-title">Filter like a serious buyer</h2>
+      </div>
+
+      <form class="search-form" id="searchForm">
+        <label for="searchInput">Search by title or location</label>
+        <input id="searchInput" type="text" placeholder="Try Chorlton, dockside or studio">
+
+        <label for="maxPriceInput">Max price</label>
+        <input id="maxPriceInput" type="number" min="0" placeholder="Example: 600000">
+
+        <label for="typeInput">Property type</label>
+        <select id="typeInput">
+          <option value="">Any type</option>
+          <option value="Apartment">Apartment</option>
+          <option value="House">House</option>
+          <option value="Studio">Studio</option>
+          <option value="Townhouse">Townhouse</option>
+        </select>
+
+        <label for="bedroomsFilterInput">Min bedrooms</label>
+        <select id="bedroomsFilterInput">
+          <option value="">Any beds</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+        </select>
+
+        <label for="sortInput">Sort listings</label>
+        <select id="sortInput">
+          <option value="featured">Featured first</option>
+          <option value="price-low">Price low to high</option>
+          <option value="price-high">Price high to low</option>
+          <option value="newest">Newest listed</option>
+        </select>
+
+        <button type="submit">Search</button>
+        <button class="secondary-button" id="resetButton" type="button">Reset</button>
+      </form>
+    </section>
+
+    <!-- Featured cards -->
+    <section class="featured-section" aria-labelledby="featured-title">
+      <div class="section-heading">
+        <p class="eyebrow">Branch picks</p>
+        <h2 id="featured-title">The homes people remember</h2>
+      </div>
+
+      <div class="featured-grid" id="featuredList">
+        <article class="featured-card" data-index="0" tabindex="0">
+          <span>New instruction</span>
+          <h3>Shoreditch Canal Apartment</h3>
+          <p>London</p>
+          <strong>£735,000</strong>
+        </article>
+
+        <article class="featured-card" data-index="1" tabindex="0">
+          <span>City signature</span>
+          <h3>Jewellery Quarter Apartment</h3>
+          <p>Birmingham</p>
+          <strong>£415,000</strong>
+        </article>
+
+        <article class="featured-card" data-index="2" tabindex="0">
+          <span>Family move</span>
+          <h3>Chorlton Townhouse</h3>
+          <p>Manchester</p>
+          <strong>£525,000</strong>
+        </article>
+      </div>
+    </section>
+
+    <!-- Main property listings -->
+    <section class="properties-section" id="properties" aria-labelledby="properties-title">
+      <div class="section-heading">
+        <p class="eyebrow">Available now</p>
+        <h2 id="properties-title">Homes on the market</h2>
+      </div>
+
+      <div class="listing-toolbar" aria-label="Listing controls">
+        <div>
+          <button class="view-button active" id="gridViewButton" type="button">Grid</button>
+          <button class="view-button" id="listViewButton" type="button">List</button>
+          <button class="view-button" id="railPrevButton" type="button" aria-label="Scroll properties left">Left</button>
+          <button class="view-button" id="railNextButton" type="button" aria-label="Scroll properties right">Right</button>
+        </div>
+        <p><span id="favoriteCount">0 saved homes</span> · compare up to 3</p>
+      </div>
+
+      <p class="results-message" id="resultsMessage"></p>
+      <div class="properties-grid" id="propertyList"></div>
+    </section>
+
+    <!-- Valuation panel -->
+    <section class="insight-section" id="valuation" aria-labelledby="valuation-title">
+      <div class="section-heading">
+        <p class="eyebrow">Valuation</p>
+        <h2 id="valuation-title">Know where your home sits before you sell.</h2>
+      </div>
+      <div class="insight-grid">
+        <article>
+          <strong>48 hrs</strong>
+          <p>Typical turnaround for a written market view after a local visit.</p>
+        </article>
+        <article>
+          <strong>3 ranges</strong>
+          <p>Conservative, expected and ambitious pricing so you can choose the right strategy.</p>
+        </article>
+        <article>
+          <strong>No noise</strong>
+          <p>Plain-English advice on presentation, demand, comparable sales and timing.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Local knowledge panel -->
+    <section class="insight-section" id="local-knowledge" aria-labelledby="local-title">
+      <div class="section-heading">
+        <p class="eyebrow">Local knowledge</p>
+        <h2 id="local-title">Area notes that make shortlisting easier.</h2>
+      </div>
+      <div class="insight-grid">
+        <article>
+          <strong>Schools</strong>
+          <p>We flag nearby schools, green space and family-friendly streets.</p>
+        </article>
+        <article>
+          <strong>Commute</strong>
+          <p>Transport links, walkability and city-centre access are baked into every viewing chat.</p>
+        </article>
+        <article>
+          <strong>Feel</strong>
+          <p>Neighbourhood rhythm, evening atmosphere and local amenities matter as much as floor area.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Detail preview updated by JavaScript -->
+    <section class="detail-section" aria-labelledby="detail-title">
+      <div class="section-heading">
+        <p class="eyebrow">Quick view</p>
+        <h2 id="detail-title">Property snapshot</h2>
+      </div>
+
+      <article class="detail-box" id="detailBox">
+        <h3>Select a property</h3>
+        <p>Click a property card or View Details button to see more information here.</p>
+      </article>
+    </section>
+
+    <!-- Add property form -->
+    <section class="add-property-section" id="add-property" aria-labelledby="add-property-title">
+      <div class="section-heading">
+        <p class="eyebrow">List with Keyline</p>
+        <h2 id="add-property-title">Add a property</h2>
+      </div>
+
+      <form class="add-form" id="addPropertyForm">
+        <label for="titleInput">Property title</label>
+        <input id="titleInput" type="text" placeholder="Example: Riverside Flat" required>
+
+        <label for="locationInput">Location</label>
+        <input id="locationInput" type="text" placeholder="Example: Leeds" required>
+
+        <label for="priceInput">Price</label>
+        <input id="priceInput" type="number" min="1" placeholder="Example: 350000" required>
+
+        <label for="bedroomsInput">Bedrooms</label>
+        <input id="bedroomsInput" type="number" min="1" placeholder="Example: 2" required>
+
+        <label for="imageInput">Image URL</label>
+        <input id="imageInput" type="url" placeholder="Optional image link">
+
+        <label for="descriptionInput">Description</label>
+        <textarea id="descriptionInput" rows="4" placeholder="Write a short property description" required></textarea>
+
+        <button type="submit">Add Property</button>
+      </form>
+    </section>
+
+    <!-- Contact section -->
+    <section class="contact-section" id="contact" aria-labelledby="contact-title">
+      <div>
+        <p class="eyebrow">Your next move</p>
+        <h2 id="contact-title">Speak to a local agent</h2>
+        <p>Need a valuation, viewing or honest advice? Our team keeps the process clear from first click to final key.</p>
+      </div>
+
+      <div class="agent-card">
+        <h3>Sarah Khan</h3>
+        <p>Senior Local Property Partner</p>
+        <a href="mailto:hello@keylineestates.co.uk">hello@keylineestates.co.uk</a>
+        <a href="tel:+442012345678">020 1234 5678</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Compare tray updated by JavaScript -->
+  <aside class="compare-tray" id="compareTray" aria-label="Compare selected properties">
+    <div>
+      <strong>Compare</strong>
+      <p id="compareList">No homes selected yet.</p>
+    </div>
+    <button class="secondary-button" id="clearCompareButton" type="button">Clear</button>
+  </aside>
+
+  <!-- Simple chat assistant powered by vanilla JavaScript -->
+  <aside class="chat-widget" id="chatWidget" aria-label="Keyline chat assistant">
+    <button class="chat-toggle" id="chatToggle" type="button" aria-expanded="false">
+      Ask Keyline
+    </button>
+
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-header">
+        <div>
+          <p class="eyebrow">Keyline assistant</p>
+          <h2>Property help</h2>
+        </div>
+        <button class="chat-close" id="chatClose" type="button" aria-label="Close chat">Close</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages" aria-live="polite">
+        <p class="bot-message">Tell me what you need: budget, location, bedrooms, valuation or viewing.</p>
+      </div>
+
+      <form class="chat-form" id="chatForm">
+        <label for="chatInput">Ask a question</label>
+        <input id="chatInput" type="text" placeholder="Try: show me homes under 500k">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </aside>
+
+  <footer class="footer">
+    <p>&copy; 2026 Keyline Estates. Built with HTML, CSS and JavaScript.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
