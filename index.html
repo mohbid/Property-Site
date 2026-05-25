@@ -20,6 +20,7 @@
 
     <div class="nav-links" id="navLinks">
       <a href="#">Home</a>
+      <a href="#experience">Property Studio</a>
       <a href="#properties">Properties</a>
       <a href="#detail-title">Snapshot</a>
       <a href="#add-property">List With Us</a>
@@ -49,6 +50,9 @@
       <div class="brand-marquee">
         <div class="brand-marquee-group">
           <a href="#contact">Private viewings</a>
+          <a href="#experience">Live property studio</a>
+          <a href="#experience">Instant listing updates</a>
+          <a href="#experience">Secure client portal</a>
           <a href="#detail-title">Mortgage estimates</a>
           <a href="#valuation">Considered valuations</a>
           <a href="#properties">Elegant listings</a>
@@ -58,6 +62,9 @@
 
         <div class="brand-marquee-group" aria-hidden="true">
           <a href="#contact" tabindex="-1">Private viewings</a>
+          <a href="#experience" tabindex="-1">Live property studio</a>
+          <a href="#experience" tabindex="-1">Instant listing updates</a>
+          <a href="#experience" tabindex="-1">Secure client portal</a>
           <a href="#detail-title" tabindex="-1">Mortgage estimates</a>
           <a href="#valuation" tabindex="-1">Considered valuations</a>
           <a href="#properties" tabindex="-1">Elegant listings</a>
@@ -95,6 +102,21 @@
           <h2>Shortlist smarter</h2>
           <p>Save homes, compare up to three, switch views and preview the numbers without leaving the page.</p>
         </article>
+      </div>
+    </section>
+
+    <!-- Interactive property studio -->
+    <section class="experience-section" id="experience" aria-labelledby="experience-title">
+      <div class="section-heading">
+        <p class="eyebrow">Client experience</p>
+        <h2 id="experience-title">Interactive property studio</h2>
+      </div>
+
+      <div class="react-experience-root" id="reactExperienceRoot">
+        <div class="react-loading">
+          <p class="eyebrow">Property studio</p>
+          <p>Loading the interactive studio...</p>
+        </div>
       </div>
     </section>
 
@@ -151,25 +173,32 @@
       </div>
 
       <div class="featured-grid" id="featuredList">
-        <article class="featured-card" data-index="0" tabindex="0">
+        <article class="featured-card" data-index="0" data-title="Shoreditch Canal Apartment" tabindex="0">
           <span>New instruction</span>
           <h3>Shoreditch Canal Apartment</h3>
           <p>London</p>
           <strong>£735,000</strong>
         </article>
 
-        <article class="featured-card" data-index="1" tabindex="0">
+        <article class="featured-card" data-index="1" data-title="Jewellery Quarter Apartment" tabindex="0">
           <span>City signature</span>
           <h3>Jewellery Quarter Apartment</h3>
           <p>Birmingham</p>
           <strong>£415,000</strong>
         </article>
 
-        <article class="featured-card" data-index="2" tabindex="0">
+        <article class="featured-card" data-index="2" data-title="Chorlton Townhouse" tabindex="0">
           <span>Family move</span>
           <h3>Chorlton Townhouse</h3>
           <p>Manchester</p>
           <strong>£525,000</strong>
+        </article>
+
+        <article class="featured-card" data-index="6" data-title="Clifton Crescent Apartment" tabindex="0">
+          <span>Curated gallery</span>
+          <h3>Clifton Crescent Apartment</h3>
+          <p>Bristol</p>
+          <strong>£695,000</strong>
         </article>
       </div>
     </section>
@@ -336,9 +365,16 @@
   </aside>
 
   <footer class="footer">
-    <p>&copy; 2026 Keyline Estates. Built with HTML, CSS and JavaScript.</p>
+    <p>&copy; 2026 Keyline Estates. Built for confident property decisions.</p>
   </footer>
 
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="script.js"></script>
+  <script src="react-experience.js"></script>
 </body>
 </html>

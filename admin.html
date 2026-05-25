@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyline Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+  <main class="admin-shell">
+    <section class="admin-hero" aria-labelledby="admin-title">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">K</span>
+        <span>Keyline Estates</span>
+      </a>
+      <div>
+        <p class="eyebrow">Private editor</p>
+        <h1 id="admin-title">Property content manager</h1>
+        <p>Sign in, amend listings, and publish changes into the Firebase properties collection.</p>
+      </div>
+    </section>
+
+    <section class="admin-card" id="loginPanel" aria-labelledby="login-title">
+      <div>
+        <p class="eyebrow">Secure access</p>
+        <h2 id="login-title">Editor sign in</h2>
+      </div>
+      <form class="admin-login" id="loginForm">
+        <label for="adminEmail">Email</label>
+        <input id="adminEmail" type="email" autocomplete="email" required>
+
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" required>
+
+        <div class="admin-actions compact">
+          <button type="submit">Sign in</button>
+          <button class="secondary-button" id="resetPasswordButton" type="button">Send password reset</button>
+        </div>
+      </form>
+      <p class="admin-message" id="loginMessage">Use the Firebase Auth account you created for Keyline.</p>
+    </section>
+
+    <section class="admin-grid hidden" id="editorPanel" aria-label="Property editor">
+      <aside class="admin-card">
+        <div class="admin-card-heading">
+          <div>
+            <p class="eyebrow">Firestore</p>
+            <h2>Properties</h2>
+          </div>
+          <button class="secondary-button" id="newPropertyButton" type="button">New</button>
+        </div>
+        <div class="admin-list" id="propertyListAdmin"></div>
+        <button class="secondary-button" id="signOutButton" type="button">Sign out</button>
+      </aside>
+
+      <section class="admin-card">
+        <div class="admin-card-heading">
+          <div>
+            <p class="eyebrow">Document</p>
+            <h2 id="formHeading">Edit property</h2>
+          </div>
+          <span class="admin-pill" id="docIdLabel">properties/new</span>
+        </div>
+
+        <form class="property-editor" id="propertyForm">
+          <label for="titleInputAdmin">Title</label>
+          <input id="titleInputAdmin" name="title" required>
+
+          <label for="locationInputAdmin">Location</label>
+          <input id="locationInputAdmin" name="location" required>
+
+          <label for="addressInputAdmin">Address</label>
+          <input id="addressInputAdmin" name="address">
+
+          <div class="field-row">
+            <label for="priceInputAdmin">Price
+              <input id="priceInputAdmin" name="price" type="number" min="1" required>
+            </label>
+            <label for="bedroomsInputAdmin">Bedrooms
+              <input id="bedroomsInputAdmin" name="bedrooms" type="number" min="0" required>
+            </label>
+            <label for="bathroomsInputAdmin">Bathrooms
+              <input id="bathroomsInputAdmin" name="bathrooms" type="number" min="0" required>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label for="typeInputAdmin">Type
+              <select id="typeInputAdmin" name="type">
+                <option>Apartment</option>
+                <option>House</option>
+                <option>Studio</option>
+                <option>Townhouse</option>
+              </select>
+            </label>
+            <label for="statusInputAdmin">Status
+              <select id="statusInputAdmin" name="status">
+                <option>For sale</option>
+                <option>Under offer</option>
+                <option>Sold STC</option>
+                <option>Let agreed</option>
+              </select>
+            </label>
+          </div>
+
+          <label for="descriptionInputAdmin">Description</label>
+          <textarea id="descriptionInputAdmin" name="description" rows="4" required></textarea>
+
+          <label for="imagesInputAdmin">Images</label>
+          <textarea id="imagesInputAdmin" name="images" rows="5" placeholder="One image URL per line"></textarea>
+
+          <div class="field-row">
+            <label for="labelInputAdmin">Label
+              <input id="labelInputAdmin" name="label">
+            </label>
+            <label for="areaInputAdmin">Area
+              <input id="areaInputAdmin" name="area">
+            </label>
+            <label for="tenureInputAdmin">Tenure
+              <input id="tenureInputAdmin" name="tenure">
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label for="epcInputAdmin">EPC
+              <input id="epcInputAdmin" name="epc">
+            </label>
+            <label for="councilTaxInputAdmin">Council tax
+              <input id="councilTaxInputAdmin" name="councilTax">
+            </label>
+            <label for="agentInputAdmin">Agent
+              <input id="agentInputAdmin" name="agent">
+            </label>
+          </div>
+
+          <label for="phoneInputAdmin">Phone</label>
+          <input id="phoneInputAdmin" name="phone">
+
+          <div class="admin-actions">
+            <button type="submit">Publish to Firebase</button>
+            <button class="secondary-button" id="seedCliftonButton" type="button">Load Clifton example</button>
+          </div>
+        </form>
+
+        <p class="admin-message" id="saveMessage">Changes save into Firestore collection: properties.</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

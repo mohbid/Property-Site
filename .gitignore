@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+
+# Firebase local cache and logs
+.firebase/
+firebase-debug.log
+*.log
+
+# Local/generated files that should not be published
+Keyline Solutions – Database – Rules – Firebase console.html
+package-lock.json

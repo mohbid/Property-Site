@@ -137,7 +137,7 @@ let properties = [
     added: "Added 3 weeks ago",
     agent: "Miles Carter",
     phone: "0117 555 0195",
-    image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?auto=format&fit=crop&w=900&q=80",
+    image: "assets/images/clifton-crescent-ai.png",
     description: "A refined Clifton apartment with tall sash windows, generous room proportions and views across a classic Georgian crescent."
   },
   {
@@ -357,9 +357,205 @@ const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 const chatMessages = document.getElementById("chatMessages");
 const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%230b0a08'/%3E%3Cstop offset='0.62' stop-color='%23191511'/%3E%3Cstop offset='1' stop-color='%23b99663'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='900' height='600' fill='url(%23g)'/%3E%3Cpath d='M128 412h644V244L450 101 128 244z' fill='%23f6efe3' stroke='%230b0a08' stroke-width='11'/%3E%3Cpath d='M230 412V278h151v134M519 412V278h151v134' fill='%23e8dcc8' stroke='%23b99663' stroke-width='8'/%3E%3Cpath d='M128 244h644' stroke='%23b99663' stroke-width='15'/%3E%3Ctext x='450' y='525' text-anchor='middle' fill='%23f6efe3' font-family='Avenir,Arial,sans-serif' font-size='34' font-weight='600'%3EKeyline Estates%3C/text%3E%3C/svg%3E";
+const cmsStorageKey = "keyline-cms-properties";
+const cmsActivityKey = "keyline-cms-activity";
+const cliftonAiImage = "assets/images/clifton-crescent-ai.png";
+const galleryByType = {
+  Apartment: [
+    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600607687644-c7171b42498b?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=900&q=80"
+  ],
+  House: [
+    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80"
+  ],
+  Studio: [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=900&q=80"
+  ],
+  Townhouse: [
+    "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=900&q=80"
+  ]
+};
+const cliftonGallery = [
+  cliftonAiImage,
+  "https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1600607687644-c7171b42498b?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=900&q=80",
+  "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=900&q=80"
+];
+
+function slugifyTitle(title) {
+  return String(title || "property")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function readJSONStorage(key, fallback) {
+  try {
+    const rawValue = window.localStorage.getItem(key);
+    return rawValue ? JSON.parse(rawValue) : fallback;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function writeJSONStorage(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    return false;
+  }
+
+  return true;
+}
+
+function deriveTags(property) {
+  const text = [
+    property.title,
+    property.location,
+    property.address,
+    property.label,
+    property.description,
+    property.tenure
+  ].join(" ").toLowerCase();
+  const tags = [property.type, property.location, property.label].filter(Boolean);
+
+  if (text.includes("clifton") || text.includes("georgian") || text.includes("victorian") || text.includes("new town")) {
+    tags.push("Period");
+  }
+
+  if (text.includes("water") || text.includes("canal") || text.includes("dock") || text.includes("bay") || text.includes("seafront")) {
+    tags.push("Waterfront");
+  }
+
+  if (text.includes("garden") || text.includes("leafy") || text.includes("park")) {
+    tags.push("Garden");
+  }
+
+  if (text.includes("city") || text.includes("loft") || text.includes("studio")) {
+    tags.push("City");
+  }
+
+  if (property.title === "Clifton Crescent Apartment") {
+    tags.push("Curated gallery");
+  }
+
+  return Array.from(new Set(tags)).slice(0, 5);
+}
+
+function buildGallery(property) {
+  if (property.title === "Clifton Crescent Apartment") {
+    return cliftonGallery;
+  }
+
+  if (Array.isArray(property.images) && property.images.length) {
+    return property.images;
+  }
+
+  if (Array.isArray(property.gallery) && property.gallery.length) {
+    return property.gallery;
+  }
+
+  const typeGallery = galleryByType[property.type] || galleryByType.House;
+  return Array.from(new Set([property.image].concat(typeGallery))).slice(0, 5);
+}
+
+function createImageBrief(property) {
+  if (property.aiBrief) {
+    return property.aiBrief;
+  }
+
+  const propertyType = String(property.type || "property");
+  const style = property.title === "Clifton Crescent Apartment"
+    ? "premium Georgian crescent exterior with honey stone, tall sash windows and quiet landscaping"
+    : "premium UK estate listing photography with bright realistic interiors and crisp architectural detail";
+
+  return "Create a fictional " + propertyType.toLowerCase() + " listing image for " + property.title + " in " + property.location + ": " + style + ", no people, no text, no logo.";
+}
+
+function getMoodScore(property) {
+  const text = (property.tags || []).join(" ").toLowerCase() + " " + String(property.description || "").toLowerCase();
+
+  if (text.includes("waterfront") || text.includes("water") || text.includes("canal") || text.includes("dock") || text.includes("bay") || text.includes("seafront")) {
+    return "Water";
+  }
+
+  if (text.includes("garden") || text.includes("leafy") || text.includes("park")) {
+    return "Garden";
+  }
+
+  if (text.includes("period") || text.includes("georgian") || text.includes("victorian") || text.includes("classic")) {
+    return "Period";
+  }
+
+  return "City";
+}
+
+function enrichProperty(property, index) {
+  const enriched = Object.assign({}, property);
+  enriched.id = enriched.id || slugifyTitle(enriched.title) + "-" + slugifyTitle(enriched.location || "uk");
+  enriched.gallery = buildGallery(enriched);
+  enriched.images = Array.isArray(enriched.images) && enriched.images.length ? enriched.images : enriched.gallery;
+  enriched.image = enriched.title === "Clifton Crescent Apartment" ? cliftonAiImage : enriched.image || enriched.gallery[0] || fallbackImage;
+  enriched.tags = Array.isArray(enriched.tags) && enriched.tags.length ? enriched.tags : deriveTags(enriched);
+  enriched.walkScore = enriched.walkScore || Math.max(68, 96 - index * 2);
+  enriched.mood = enriched.mood || getMoodScore(enriched);
+  enriched.cmsStatus = enriched.cmsStatus || "Published";
+  enriched.apiPath = enriched.apiPath || "/api/properties/" + enriched.id;
+  enriched.aiBrief = createImageBrief(enriched);
+  enriched.imageMode = enriched.title === "Clifton Crescent Apartment" ? "Curated concept gallery" : "Editorial gallery pack";
+
+  return enriched;
+}
+
+function readCmsProperties() {
+  const storedProperties = readJSONStorage(cmsStorageKey, []);
+
+  if (!Array.isArray(storedProperties)) {
+    return [];
+  }
+
+  return storedProperties.filter(function(property) {
+    return property && property.title && property.price;
+  });
+}
+
+function persistCmsProperty(property) {
+  const storedProperties = readCmsProperties();
+  const withoutDuplicate = storedProperties.filter(function(storedProperty) {
+    return storedProperty.id !== property.id;
+  });
+
+  writeJSONStorage(cmsStorageKey, [property].concat(withoutDuplicate).slice(0, 12));
+}
+
+function rememberCmsActivity(message) {
+  const activity = readJSONStorage(cmsActivityKey, []);
+  const entry = {
+    message: message,
+    time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+  };
+
+  writeJSONStorage(cmsActivityKey, [entry].concat(Array.isArray(activity) ? activity : []).slice(0, 5));
+}
+
+properties = readCmsProperties().concat(properties).map(enrichProperty);
 let currentProperties = properties;
 let savedHomes = [];
 let compareHomes = [];
+let firebasePropertyIds = [];
+let firebasePropertiesUnsubscribe = null;
 let soundEnabled = false;
 let audioContext;
 let latestScrollY = 0;
@@ -675,6 +871,7 @@ function showProperties(list) {
           <span>${escapeHTML(property.type)}</span>
           <span>${escapeHTML(property.area)}</span>
           <span>EPC ${escapeHTML(property.epc)}</span>
+          <span>${(property.gallery || []).length} images</span>
         </div>
         <p class="listing-note">${escapeHTML(property.tenure)} · ${escapeHTML(property.added)}</p>
         <div class="card-actions">
@@ -696,12 +893,25 @@ function showProperties(list) {
 // This function updates the detail preview section.
 function showDetails(property) {
   const monthlyPayment = calculateMonthlyPayment(property.price);
+  const gallery = Array.isArray(property.gallery) && property.gallery.length ? property.gallery : [property.image];
+  const galleryHTML = gallery.slice(0, 5).map(function(image, index) {
+    const label = index === 0 ? "Featured view" : "Gallery view " + (index + 1);
+    return `
+      <figure>
+        <img src="${escapeHTML(image)}" alt="${escapeHTML(property.title)} ${label}">
+        <figcaption>${label}</figcaption>
+      </figure>
+    `;
+  }).join("");
 
   detailBox.innerHTML = `
     <div class="detail-layout">
       <div>
         <span class="property-label">${escapeHTML(property.label)}</span>
         <h3>${escapeHTML(property.title)}</h3>
+        <div class="detail-gallery">
+          ${galleryHTML}
+        </div>
         <p><strong>Address:</strong> ${escapeHTML(property.address)}</p>
         <p><strong>Location:</strong> ${escapeHTML(property.location)}</p>
         <p><strong>Price:</strong> ${formatPrice(property.price)}</p>
@@ -727,15 +937,33 @@ function showDetails(property) {
         <strong>${formatPrice(monthlyPayment)} / month</strong>
         <p>Based on a 10% deposit, 25 years and 5% interest.</p>
         <progress value="${property.price}" max="1200000"></progress>
+        <div class="stack-mini">
+          <span>${escapeHTML(property.imageMode || "Gallery pack")}</span>
+          <span>${escapeHTML(property.cmsStatus || "Published")}</span>
+        </div>
       </div>
     </div>
   `;
+
+  detailBox.querySelectorAll(".detail-gallery img").forEach(addImageFallback);
 
   detailBox.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function openPropertyFromCard(card) {
   const propertyIndex = Number(card.dataset.index);
+  const propertyTitle = card.dataset.title;
+
+  if (propertyTitle) {
+    const matchingProperty = properties.find(function(property) {
+      return property.title === propertyTitle;
+    });
+
+    if (matchingProperty) {
+      showDetails(matchingProperty);
+      return;
+    }
+  }
 
   if (properties[propertyIndex]) {
     showDetails(properties[propertyIndex]);
@@ -765,6 +993,370 @@ function filterProperties() {
   });
 
   showProperties(getSortedProperties(filteredProperties));
+}
+
+function notifyPropertyChange(reason) {
+  window.dispatchEvent(new CustomEvent("keyline:properties-updated", {
+    detail: {
+      reason: reason,
+      properties: properties
+    }
+  }));
+}
+
+function insertPropertyAtTop(property, options) {
+  const settings = Object.assign({ persist: true, focusDetail: true }, options);
+  const enrichedProperty = enrichProperty(property, 0);
+
+  savedHomes = savedHomes.map(function(index) {
+    return index + 1;
+  });
+  compareHomes = compareHomes.map(function(index) {
+    return index + 1;
+  });
+  properties.unshift(enrichedProperty);
+  currentProperties = properties;
+
+  if (settings.persist) {
+    persistCmsProperty(enrichedProperty);
+    rememberCmsActivity("Published " + enrichedProperty.title);
+  }
+
+  showProperties(getSortedProperties(properties));
+
+  if (settings.focusDetail) {
+    showDetails(enrichedProperty);
+  }
+
+  notifyPropertyChange("property-published");
+  return enrichedProperty;
+}
+
+function hasFirebaseConfig() {
+  const config = window.KEYLINE_FIREBASE_CONFIG || {};
+  return Boolean(config.apiKey && config.projectId && config.appId);
+}
+
+function getFirebaseStatus() {
+  if (!hasFirebaseConfig()) {
+    return "Config needed";
+  }
+
+  if (!window.firebase || !window.firebase.firestore) {
+    return "SDK unavailable";
+  }
+
+  return "Ready";
+}
+
+function getFirebaseApp() {
+  if (!hasFirebaseConfig() || !window.firebase) {
+    return null;
+  }
+
+  if (!window.firebase.apps.length) {
+    window.firebase.initializeApp(window.KEYLINE_FIREBASE_CONFIG);
+  }
+
+  return window.firebase.app();
+}
+
+function getFirestoreDatabase() {
+  if (getFirebaseStatus() !== "Ready") {
+    return null;
+  }
+
+  if (!getFirebaseApp()) {
+    return null;
+  }
+
+  return window.firebase.firestore();
+}
+
+function getFirebaseAuth() {
+  if (!getFirebaseApp() || !window.firebase.auth) {
+    return null;
+  }
+
+  return window.firebase.auth();
+}
+
+function isAdminUser(user) {
+  return Boolean(user && window.KEYLINE_ADMIN_UID && user.uid === window.KEYLINE_ADMIN_UID);
+}
+
+function getAuthStatus() {
+  const auth = getFirebaseAuth();
+
+  if (!auth) {
+    return {
+      isReady: false,
+      isSignedIn: false,
+      isAdmin: false,
+      label: "Auth unavailable",
+      email: ""
+    };
+  }
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    return {
+      isReady: true,
+      isSignedIn: false,
+      isAdmin: false,
+      label: "Sign in needed",
+      email: ""
+    };
+  }
+
+  return {
+    isReady: true,
+    isSignedIn: true,
+    isAdmin: isAdminUser(user),
+    label: isAdminUser(user) ? "Admin signed in" : "Not admin",
+    email: user.email || ""
+  };
+}
+
+function notifyAuthChange() {
+  window.dispatchEvent(new CustomEvent("keyline:auth-updated", {
+    detail: getAuthStatus()
+  }));
+}
+
+function watchFirebaseAuth() {
+  const auth = getFirebaseAuth();
+
+  if (!auth) {
+    return;
+  }
+
+  auth.onAuthStateChanged(function() {
+    notifyAuthChange();
+    notifyPropertyChange("auth-updated");
+  });
+}
+
+async function signInAdmin(email, password) {
+  const auth = getFirebaseAuth();
+
+  if (!auth) {
+    throw new Error("Firebase Auth SDK is unavailable.");
+  }
+
+  const credential = await auth.signInWithEmailAndPassword(email, password);
+
+  if (!isAdminUser(credential.user)) {
+    await auth.signOut();
+    throw new Error("This account is not the Keyline admin account.");
+  }
+
+  notifyAuthChange();
+  return getAuthStatus();
+}
+
+async function signOutAdmin() {
+  const auth = getFirebaseAuth();
+
+  if (!auth) {
+    return getAuthStatus();
+  }
+
+  await auth.signOut();
+  notifyAuthChange();
+  return getAuthStatus();
+}
+
+async function writePropertyToFirebase(property) {
+  const database = getFirestoreDatabase();
+
+  if (!database) {
+    return { ok: false, status: getFirebaseStatus() };
+  }
+
+  if (!getAuthStatus().isAdmin) {
+    return { ok: false, status: "Sign in as admin first" };
+  }
+
+  await database
+    .collection(window.KEYLINE_CMS_COLLECTION || "properties")
+    .doc(property.id)
+    .set(property, { merge: true });
+
+  return { ok: true, status: "Synced" };
+}
+
+function mergeFirebaseProperties(remoteProperties, reason) {
+  if (!remoteProperties.length) {
+    return;
+  }
+
+  const remoteIds = remoteProperties.map(function(property) {
+    return property.id;
+  });
+  const localOnlyProperties = properties.filter(function(property) {
+    return !remoteIds.includes(property.id) && !firebasePropertyIds.includes(property.id);
+  });
+
+  firebasePropertyIds = remoteIds;
+  properties = remoteProperties.concat(localOnlyProperties).map(enrichProperty);
+  showProperties(getSortedProperties(properties));
+  notifyPropertyChange(reason);
+}
+
+async function syncPropertiesFromFirebase() {
+  const database = getFirestoreDatabase();
+
+  if (!database) {
+    return {
+      ok: false,
+      source: getFirebaseStatus(),
+      properties: properties
+    };
+  }
+
+  const snapshot = await database
+    .collection(window.KEYLINE_CMS_COLLECTION || "properties")
+    .get();
+  const remoteProperties = [];
+
+  snapshot.forEach(function(documentSnapshot) {
+    remoteProperties.push(Object.assign({ id: documentSnapshot.id }, documentSnapshot.data()));
+  });
+
+  mergeFirebaseProperties(remoteProperties, "firebase-sync");
+
+  rememberCmsActivity("Firebase sync completed");
+  return {
+    ok: true,
+    source: "Firebase",
+    properties: properties
+  };
+}
+
+function watchPropertiesFromFirebase() {
+  const database = getFirestoreDatabase();
+
+  if (!database || firebasePropertiesUnsubscribe) {
+    return null;
+  }
+
+  firebasePropertiesUnsubscribe = database
+    .collection(window.KEYLINE_CMS_COLLECTION || "properties")
+    .onSnapshot(function(snapshot) {
+      const remoteProperties = [];
+
+      snapshot.forEach(function(documentSnapshot) {
+        remoteProperties.push(Object.assign({ id: documentSnapshot.id }, documentSnapshot.data()));
+      });
+
+      mergeFirebaseProperties(remoteProperties, "firebase-live");
+      rememberCmsActivity("Live Firebase listings refreshed");
+    }, function(error) {
+      rememberCmsActivity("Firebase live refresh failed: " + error.message);
+    });
+
+  return firebasePropertiesUnsubscribe;
+}
+
+async function postPropertyToRest(property) {
+  const endpoint = (window.KEYLINE_REST_ENDPOINT || "").replace(/\/$/, "");
+
+  if (!endpoint) {
+    return { ok: false, status: "Local mock" };
+  }
+
+  const response = await fetch(endpoint + "/properties", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(property)
+  });
+
+  if (!response.ok) {
+    throw new Error("REST API returned " + response.status);
+  }
+
+  return { ok: true, status: "Synced" };
+}
+
+async function publishPropertyFromCms(property) {
+  const publishedProperty = insertPropertyAtTop(property, { persist: true, focusDetail: false });
+  const results = {
+    property: publishedProperty,
+    rest: { ok: false, status: "Local mock" },
+    firebase: { ok: false, status: getFirebaseStatus() }
+  };
+
+  try {
+    results.rest = await postPropertyToRest(publishedProperty);
+  } catch (error) {
+    results.rest = { ok: false, status: error.message };
+  }
+
+  try {
+    results.firebase = await writePropertyToFirebase(publishedProperty);
+  } catch (error) {
+    results.firebase = { ok: false, status: error.message };
+  }
+
+  notifyPropertyChange("cms-published");
+  return results;
+}
+
+async function syncPropertiesFromRest() {
+  const endpoint = (window.KEYLINE_REST_ENDPOINT || "").replace(/\/$/, "");
+
+  if (!endpoint) {
+    rememberCmsActivity("REST sync used local listings");
+    return {
+      ok: true,
+      source: "Local mock",
+      properties: properties
+    };
+  }
+
+  const response = await fetch(endpoint + "/properties");
+
+  if (!response.ok) {
+    throw new Error("REST API returned " + response.status);
+  }
+
+  const remoteProperties = await response.json();
+
+  if (Array.isArray(remoteProperties)) {
+    properties = remoteProperties.concat(properties).map(enrichProperty);
+    showProperties(getSortedProperties(properties));
+    notifyPropertyChange("rest-sync");
+  }
+
+  rememberCmsActivity("REST sync completed");
+  return {
+    ok: true,
+    source: endpoint,
+    properties: properties
+  };
+}
+
+function showPropertyById(propertyId) {
+  const property = properties.find(function(item) {
+    return item.id === propertyId;
+  });
+
+  if (property) {
+    showDetails(property);
+  }
+}
+
+function getStackStatus() {
+  return {
+    studio: window.React && window.ReactDOM ? "Interactive" : "Loading",
+    listings: getFirebaseStatus() === "Ready" ? "Live ready" : "Ready",
+    portal: "Secure",
+    updates: readCmsProperties().length ? "Recent edits" : "Ready"
+  };
 }
 
 searchForm.addEventListener("submit", function(event) {
@@ -901,16 +1493,8 @@ addPropertyForm.addEventListener("submit", function(event) {
     description: document.getElementById("descriptionInput").value
   };
 
-  savedHomes = savedHomes.map(function(index) {
-    return index + 1;
-  });
-  compareHomes = compareHomes.map(function(index) {
-    return index + 1;
-  });
-  properties.unshift(newProperty);
   addPropertyForm.reset();
-  showProperties(properties);
-  showDetails(newProperty);
+  insertPropertyAtTop(newProperty, { persist: true, focusDetail: true });
 });
 
 // Small-screen menu toggle.
@@ -1012,6 +1596,32 @@ if ("IntersectionObserver" in window) {
   });
 }
 
+window.KeylineCMS = {
+  getProperties: function() {
+    return properties.slice();
+  },
+  getActivity: function() {
+    return readJSONStorage(cmsActivityKey, []);
+  },
+  getStackStatus: getStackStatus,
+  getAuthStatus: getAuthStatus,
+  signInAdmin: signInAdmin,
+  signOutAdmin: signOutAdmin,
+  publishProperty: publishPropertyFromCms,
+  syncPropertiesFromFirebase: syncPropertiesFromFirebase,
+  syncPropertiesFromRest: syncPropertiesFromRest,
+  showPropertyById: showPropertyById,
+  formatPrice: formatPrice,
+  calculateMonthlyPayment: calculateMonthlyPayment,
+  buildImageBrief: createImageBrief,
+  fallbackImage: fallbackImage
+};
+
 // Show all properties when the page first loads.
+watchFirebaseAuth();
 showProperties(getSortedProperties(properties));
 updateSectionMotion();
+watchPropertiesFromFirebase();
+syncPropertiesFromFirebase().catch(function() {
+  showProperties(getSortedProperties(properties));
+});

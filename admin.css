@@ -1,0 +1,152 @@
+.admin-body {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(11, 31, 32, 0.96), rgba(17, 16, 14, 0.94)),
+    var(--hero-pattern);
+  color: var(--cream);
+}
+
+.admin-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 56px;
+}
+
+.admin-hero {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  gap: 32px;
+  align-items: end;
+  padding: 28px 0 36px;
+}
+
+.admin-hero h1 {
+  margin: 6px 0 10px;
+  font-size: clamp(2.4rem, 6vw, 5.8rem);
+}
+
+.admin-card {
+  border: 1px solid rgba(246, 239, 227, 0.16);
+  background: rgba(14, 14, 12, 0.82);
+  padding: 24px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+}
+
+.admin-card-heading,
+.admin-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.admin-actions.compact {
+  justify-content: flex-start;
+  margin: 6px 0 0;
+}
+
+.admin-actions.compact button {
+  min-width: 190px;
+}
+
+.admin-card h2 {
+  margin: 4px 0 0;
+  font-size: 1.55rem;
+}
+
+.admin-login,
+.property-editor {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-login {
+  max-width: 520px;
+}
+
+.property-editor label,
+.admin-login label {
+  display: grid;
+  gap: 8px;
+  color: rgba(246, 239, 227, 0.72);
+  font-size: 0.9rem;
+}
+
+.property-editor input,
+.property-editor textarea,
+.property-editor select,
+.admin-login input {
+  width: 100%;
+  border: 1px solid rgba(246, 239, 227, 0.18);
+  background: rgba(246, 239, 227, 0.08);
+  color: var(--cream);
+  padding: 12px 13px;
+  font: inherit;
+}
+
+.property-editor textarea {
+  resize: vertical;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+
+.admin-list button {
+  text-align: left;
+  justify-content: flex-start;
+  background: rgba(246, 239, 227, 0.08);
+  border-color: rgba(246, 239, 227, 0.14);
+}
+
+.admin-list button.active {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+.admin-pill,
+.admin-message {
+  color: rgba(246, 239, 227, 0.72);
+}
+
+.admin-pill {
+  border: 1px solid rgba(246, 239, 227, 0.16);
+  padding: 8px 10px;
+  font-size: 0.78rem;
+}
+
+.admin-message {
+  margin: 16px 0 0;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .admin-hero,
+  .admin-grid,
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-actions,
+  .admin-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
